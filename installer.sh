@@ -19,25 +19,23 @@ read WORKSPACE
 # Define paths
 BASE="/home/user"
 WORKDIR="$BASE/$WORKSPACE"
+IDXDIR="$WORKDIR/.idx"
 VMFOLDER="$WORKDIR/googlevm"
 
-# Create workspace directory if not exists
+# Create directories
 echo -e "${CYAN}Creating workspace at: $WORKDIR ...${RESET}"
-mkdir -p "$WORKDIR"
+mkdir -p "$IDXDIR"
+mkdir -p "$VMFOLDER"
 
-# Move dev.nix
+# Move dev.nix into .idx folder
 if [ -f "dev.nix" ]; then
-    mv dev.nix "$WORKDIR/"
-    echo -e "${GREEN}✔ dev.nix moved to $WORKDIR/${RESET}"
+    mv dev.nix "$IDXDIR/dev.nix"
+    echo -e "${GREEN}✔ dev.nix moved to $IDXDIR/dev.nix${RESET}"
 else
     echo -e "${RED}✘ dev.nix not found in current directory!${RESET}"
 fi
 
-# Create googlevm folder
-mkdir -p "$VMFOLDER"
-echo -e "${GREEN}✔ Created $VMFOLDER${RESET}"
-
-# Move ubuntu.sh and debian.sh
+# Move ubuntu.sh and debian.sh into googlevm folder
 for file in ubuntu.sh debian.sh; do
     if [ -f "$file" ]; then
         mv "$file" "$VMFOLDER/"
@@ -54,7 +52,7 @@ echo -e "${CYAN}[2] Debian${RESET}"
 echo -ne "${YELLOW}Choose (1/2): ${RESET}"
 read CHOICE
 
-cd "$VMFOLDER"
+cd "$VMFOLDER" || { echo -e "${RED}✘ Failed to enter $VMFOLDER${RESET}"; exit 1; }
 
 case $CHOICE in
     1)
