@@ -9,7 +9,7 @@ RESET="\e[0m"
 
 clear
 echo -e "${CYAN}======================================${RESET}"
-echo -e "${GREEN}   🚀 Google VM Installer Script 🚀   ${RESET}"
+echo -e "${GREEN}   🚀 Google VM Installer (Part 1) 🚀 ${RESET}"
 echo -e "${CYAN}======================================${RESET}"
 
 # Ask for workspace name
@@ -20,12 +20,10 @@ read WORKSPACE
 BASE="/home/user"
 WORKDIR="$BASE/$WORKSPACE"
 IDXDIR="$WORKDIR/.idx"
-VMFOLDER="$WORKDIR/googlevm"
 
 # Create directories
 echo -e "${CYAN}Creating workspace at: $WORKDIR ...${RESET}"
 mkdir -p "$IDXDIR"
-mkdir -p "$VMFOLDER"
 
 # Move dev.nix into .idx folder
 if [ -f "dev.nix" ]; then
@@ -35,43 +33,8 @@ else
     echo -e "${RED}✘ dev.nix not found in current directory!${RESET}"
 fi
 
-# Move ubuntu.sh and debian.sh into googlevm folder
-for file in ubuntu.sh debian.sh; do
-    if [ -f "$file" ]; then
-        mv "$file" "$VMFOLDER/"
-        echo -e "${GREEN}✔ Moved $file to $VMFOLDER/${RESET}"
-    else
-        echo -e "${RED}✘ $file not found in current directory!${RESET}"
-    fi
-done
+# Save workspace name for continue.sh
+echo "$WORKSPACE" > /tmp/workspace_name.txt
 
-# Ask for installation choice
-echo -e "\n${YELLOW}Which installation do you want?${RESET}"
-echo -e "${CYAN}[1] Ubuntu${RESET}"
-echo -e "${CYAN}[2] Debian${RESET}"
-echo -ne "${YELLOW}Choose (1/2): ${RESET}"
-read CHOICE
-
-cd "$VMFOLDER" || { echo -e "${RED}✘ Failed to enter $VMFOLDER${RESET}"; exit 1; }
-
-case $CHOICE in
-    1)
-        if [ -f "ubuntu.sh" ]; then
-            echo -e "${GREEN}🚀 Starting Ubuntu installation...${RESET}"
-            bash ubuntu.sh
-        else
-            echo -e "${RED}✘ ubuntu.sh not found!${RESET}"
-        fi
-        ;;
-    2)
-        if [ -f "debian.sh" ]; then
-            echo -e "${GREEN}🚀 Starting Debian installation...${RESET}"
-            bash debian.sh
-        else
-            echo -e "${RED}✘ debian.sh not found!${RESET}"
-        fi
-        ;;
-    *)
-        echo -e "${RED}✘ Invalid choice! Exiting...${RESET}"
-        ;;
-esac
+echo -e "\n${GREEN}✔ Part 1 complete! Now run:${RESET}"
+echo -e "${CYAN}   ./continue.sh${RESET}"
