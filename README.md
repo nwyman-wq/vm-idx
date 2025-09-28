@@ -9,4 +9,4 @@ Easiest way to set up your Google VM workspace with **Ubuntu** or **Debian** ins
 You can run the installer directly from GitHub without cloning manually:
 
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/nwyman-wq/vm-idx/main/install.sh)
+git clone https://github.com/nwyman-wq/vm-idx.git && cd vm-idx && bash installer.sh
